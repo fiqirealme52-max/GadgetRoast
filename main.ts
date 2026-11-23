@@ -1,17 +1,17 @@
-// One-Line Roast: The Gadget You Use Every Day.
-// The roast below is the entry: one original line about a daily gadget
-// (the dishwasher), kept byte-identical — only the plumbing around it
-// may change, never the line itself.
-import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
+// One-Line Roast: The Gadget You Use Every Day
+// Entry program: writes the roast line to /output/entry.txt.
+import { readFileSync, writeFileSync } from "node:fs";
 
 const LINE =
   "My dishwasher runs a four-hour 'pots and pans' cycle and still leaves one spoon dirty. The same spoon. Every time.";
 
-mkdirSync("/output", { recursive: true });
 writeFileSync("/output/entry.txt", LINE + "\n", "utf8");
 
-// Read back and verify: a corrupted output must fail loudly, not ship.
+// Read the file back and make sure it holds exactly the line we meant
+// to enter — if the write was cut short or garbled, fail loudly instead
+// of submitting a broken entry.
 const written = readFileSync("/output/entry.txt", "utf8");
-if (written.trim() !== LINE) {
+if (written !== LINE + "\n") {
   throw new Error("entry.txt does not match the roast line");
 }
+console.log(`wrote ${LINE.length}-char line to /output/entry.txt`);
